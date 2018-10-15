@@ -1,46 +1,48 @@
-// Initial array of terms
-var terms = ["Mario", "Luigi", "Bowser", "Donkey Kong"];
+// Initial array of topics
+var topics = ["Mario", "Luigi", "Bowser", "Donkey Kong"];
 
 // Function for generating button html code 
 function renderButtons() {
     console.log("renderButtons")
-    $("#terms").empty()
+    $("#topics").empty()
 
-    for (var i = 0; i < terms.length; i++) {
-        var newButton = $("<button>").text(terms[i])
-        newButton.addClass("termButton")
-        $("#terms").append(newButton)
+    for (var i = 0; i < topics.length; i++) {
+        var newButton = $("<button>").text(topics[i])
+        newButton.addClass("topicButton")
+        $("#topics").append(newButton)
     }
 
 }
 
-// Function for the user to add a new term 
-$(document).on("click", '#add-term', function (event) {
+// Function for the user to add a new topic 
+$(document).on("click", '#add-topic', function(event) {
     event.preventDefault();
 
-    var userInput = $("#term-input").val();
-    terms.push(userInput)
+    var userInput = $("#topic-input").val();
+    if (userInput.length === 0) {
+        return
+    }
+    topics.push(userInput)
 
     renderButtons();
 });
 
-// Calling the renderButtons function to display the initial list of terms
+// Calling the renderButtons function to display the initial list of topics
 renderButtons();
 
 
 
 
 
-/////////////////////
-// Event listener for all button elements
-$(document).on("click", '.termButton', function () {
+// Event listener for all topicButtons
+$(document).on("click", '.topicButton', function() {
     console.log($(this).text())
-    var termApi = $(this).text();
+    var topicApi = $(this).text();
 
-    // Constructing a URL to search Giphy for term that was clicked on
+    // Constructing a URL to search Giphy for topic that was clicked on
     var apiKey = "XdsOhqx5uXnzfVmZTVpmV4KWzHKV70bV"
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        termApi + "&api_key=" + apiKey + "&limit=10";
+        topicApi + "&api_key=" + apiKey + "&limit=10";
 
     $.ajax({
         url: queryURL,
@@ -55,37 +57,34 @@ $(document).on("click", '.termButton', function () {
                     var gifDiv = $("<div>");
                     var rating = results[i].rating;
                     var t = $("<p>").text("Rating: " + rating);
-                    var termImage = $("<img>");
-                    termImage.attr("src", results[i].images.fixed_height.url);
+                    var topicImage = $("<img>");
+                    topicImage.data("staticGIF", results[i].images.fixed_height_still.url);
+                    topicImage.data("movingGIF", results[i].images.fixed_height.url);
+                    topicImage.data("state", "static");
+                    topicImage.attr("src", topicImage.data("staticGIF"));
+                    topicImage.addClass("gif")
+                    
                     gifDiv.append(t);
-                    gifDiv.append(termImage);
+                    gifDiv.append(topicImage);
                     $("#gifs-appear-here").prepend(gifDiv);
                 }
             }
         });
 });
-///////////////////////////
 
 
 
 
-
-
-
-
-//<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
-$(".gif").on("click", function () {
-    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-    var state = $(this).attr("data-state");
-    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-    // Then, set the image's data-state to animate
-    // Else set src to the data-still value
-    if (state === "still") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
+// Function to change from static to moving and vice versa
+$(document).on("click", '.gif', function() {
+    var state = $(this).data("state");
+   
+    if (state === "static") {
+        $(this).attr("src", $(this).data("movingGIF"));
+        $(this).data("state", "moving");
     } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
+        $(this).attr("src", $(this).data("staticGIF"));
+        $(this).data("state", "static");
     }
 });
 
