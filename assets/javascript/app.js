@@ -37,6 +37,7 @@ function renderGIFs(term) {
             var results = response.data;
 
             for (var i = 0; i < results.length; i++) {
+                //if (year > 2015) {
                 var topicImage = $("<img>")
                 topicImage.data("staticGIF", results[i].images.fixed_height_still.url)
                 topicImage.data("movingGIF", results[i].images.fixed_height.url)
@@ -44,36 +45,52 @@ function renderGIFs(term) {
                 topicImage.attr("src", topicImage.data("staticGIF"));
                 topicImage.addClass("gif")
 
-                var rating = $("<p>").text("Rating: " + results[i].rating)
+                var ratingP = $("<p>").text("Rating: " + results[i].rating)
+                var year = parseInt(results[i].import_datetime.split('-')[0])
+                var yearP = $("<p>").text("Imported: " + year)
 
-                var downloadButton = $("<button>").addClass("dlbtn fa fa-download")          
+                //var downloadButton = $("<button>").addClass("dlbtn fa fa-download")
+                var favButton = $("<button>").addClass("fav fas fa-star")
 
                 var gifDiv = $("<div>").addClass("gif");
                 gifDiv.append(topicImage)
-                gifDiv.append(rating)
-                gifDiv.append(downloadButton)
+                gifDiv.append(ratingP)
+                gifDiv.append(yearP)
+                // gifDiv.append(downloadButton)
+                gifDiv.append(favButton)
                 $("#gifs-appear-here").prepend(gifDiv);
             }
+            //  }
         });
 
 }
 
 
 
-function downloadURI(uri, name) {
-    var link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    delete link;
-}
 
-$(document).on('click', ".dlbtn", function () {
-    var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
-    downloadURI(dataURL, 'my.gif');
-    //download(dataURL, "my.gif", "image/webp");
+//function downloadURI(uri, name) {
+//    var link = document.createElement("a");
+//   link.download = name;
+//   link.href = uri;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+//   delete link;
+//}
+//
+//$(document).on('click', ".dlbtn", function () {
+//  var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
+//  downloadURI(dataURL, 'my.gif');
+//download(dataURL, "my.gif", "image/webp");
+///});
+
+$(document).on('click', ".fav", function () {
+    var divThatHasFullGifStuff = $(this).parent()
+    //$("#favs-appear-here").append(divThatHasFullGifStuff)
+   // var saveArray = []
+    //saveArray.push(divThatHasFullGifStuff)
+   
+    localStorage.setItem("gif", divThatHasFullGifStuff[0].innerHTML)
 });
 
 // Function for the user to add a new topic 
@@ -93,6 +110,11 @@ $(document).on("click", '#add-topic', function (event) {
 renderButtons();
 
 
+var tester = localStorage.getItem('gif')
+var mineGif = $("<div>").html(tester)
+$("#favs-appear-here").append(mineGif)
+
+
 
 // Event listener for all topicButtons
 $(document).on("click", '.topicButton', function () {
@@ -108,7 +130,7 @@ $("#moreGIFs").on("click", function () {
         return;
     }
     else {
-        offset+=10
+        offset += 10
         renderGIFs(currentTopic)
     }
 });
@@ -142,155 +164,155 @@ $(document).on("click", '.gif', function () {
 // https://github.com/rndme/download
 
 (function (root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD. Register as an anonymous module.
-		define([], factory);
-	} else if (typeof exports === 'object') {
-		// Node. Does not work with strict CommonJS, but
-		// only CommonJS-like environments that support module.exports,
-		// like Node.
-		module.exports = factory();
-	} else {
-		// Browser globals (root is window)
-		root.download = factory();
-  }
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.download = factory();
+    }
 }(this, function () {
 
-	return function download(data, strFileName, strMimeType) {
+    return function download(data, strFileName, strMimeType) {
 
-		var self = window, // this script is only for browsers anyway...
-			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
-			mimeType = strMimeType || defaultMime,
-			payload = data,
-			url = !strFileName && !strMimeType && payload,
-			anchor = document.createElement("a"),
-			toString = function(a){return String(a);},
-			myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
-			fileName = strFileName || "download",
-			blob,
-			reader;
-			myBlob= myBlob.call ? myBlob.bind(self) : Blob ;
-	  
-		if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
-			payload=[payload, mimeType];
-			mimeType=payload[0];
-			payload=payload[1];
-		}
+        var self = window, // this script is only for browsers anyway...
+            defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
+            mimeType = strMimeType || defaultMime,
+            payload = data,
+            url = !strFileName && !strMimeType && payload,
+            anchor = document.createElement("a"),
+            toString = function (a) { return String(a); },
+            myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
+            fileName = strFileName || "download",
+            blob,
+            reader;
+        myBlob = myBlob.call ? myBlob.bind(self) : Blob;
 
-
-		if(url && url.length< 2048){ // if no filename and no mime, assume a url was passed as the only argument
-			fileName = url.split("/").pop().split("?")[0];
-			anchor.href = url; // assign href prop to temp anchor
-		  	if(anchor.href.indexOf(url) !== -1){ // if the browser determines that it's a potentially valid url path:
-        		var ajax=new XMLHttpRequest();
-        		ajax.open( "GET", url, true);
-        		ajax.responseType = 'blob';
-        		ajax.onload= function(e){ 
-				  download(e.target.response, fileName, defaultMime);
-				};
-        		setTimeout(function(){ ajax.send();}, 0); // allows setting custom ajax headers using the return:
-			    return ajax;
-			} // end if valid url?
-		} // end if url?
+        if (String(this) === "true") { //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
+            payload = [payload, mimeType];
+            mimeType = payload[0];
+            payload = payload[1];
+        }
 
 
-		//go ahead and download dataURLs right away
-		if(/^data\:[\w+\-]+\/[\w+\-]+[,;]/.test(payload)){
-		
-			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
-				payload=dataUrlToBlob(payload);
-				mimeType=payload.type || defaultMime;
-			}else{			
-				return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
-					navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
-					saver(payload) ; // everyone else can save dataURLs un-processed
-			}
-			
-		}//end if dataURL passed?
-
-		blob = payload instanceof myBlob ?
-			payload :
-			new myBlob([payload], {type: mimeType}) ;
+        if (url && url.length < 2048) { // if no filename and no mime, assume a url was passed as the only argument
+            fileName = url.split("/").pop().split("?")[0];
+            anchor.href = url; // assign href prop to temp anchor
+            if (anchor.href.indexOf(url) !== -1) { // if the browser determines that it's a potentially valid url path:
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", url, true);
+                ajax.responseType = 'blob';
+                ajax.onload = function (e) {
+                    download(e.target.response, fileName, defaultMime);
+                };
+                setTimeout(function () { ajax.send(); }, 0); // allows setting custom ajax headers using the return:
+                return ajax;
+            } // end if valid url?
+        } // end if url?
 
 
-		function dataUrlToBlob(strUrl) {
-			var parts= strUrl.split(/[:;,]/),
-			type= parts[1],
-			decoder= parts[2] == "base64" ? atob : decodeURIComponent,
-			binData= decoder( parts.pop() ),
-			mx= binData.length,
-			i= 0,
-			uiArr= new Uint8Array(mx);
+        //go ahead and download dataURLs right away
+        if (/^data\:[\w+\-]+\/[\w+\-]+[,;]/.test(payload)) {
 
-			for(i;i<mx;++i) uiArr[i]= binData.charCodeAt(i);
+            if (payload.length > (1024 * 1024 * 1.999) && myBlob !== toString) {
+                payload = dataUrlToBlob(payload);
+                mimeType = payload.type || defaultMime;
+            } else {
+                return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
+                    navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
+                    saver(payload); // everyone else can save dataURLs un-processed
+            }
 
-			return new myBlob([uiArr], {type: type});
-		 }
+        }//end if dataURL passed?
 
-		function saver(url, winMode){
-
-			if ('download' in anchor) { //html5 A[download]
-				anchor.href = url;
-				anchor.setAttribute("download", fileName);
-				anchor.className = "download-js-link";
-				anchor.innerHTML = "downloading...";
-				anchor.style.display = "none";
-				document.body.appendChild(anchor);
-				setTimeout(function() {
-					anchor.click();
-					document.body.removeChild(anchor);
-					if(winMode===true){setTimeout(function(){ self.URL.revokeObjectURL(anchor.href);}, 250 );}
-				}, 66);
-				return true;
-			}
-
-			// handle non-a[download] safari as best we can:
-			if(/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
-				url=url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
-				if(!window.open(url)){ // popup blocked, offer direct download:
-					if(confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")){ location.href=url; }
-				}
-				return true;
-			}
-
-			//do iframe dataURL download (old ch+FF):
-			var f = document.createElement("iframe");
-			document.body.appendChild(f);
-
-			if(!winMode){ // force a mime that will download:
-				url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
-			}
-			f.src=url;
-			setTimeout(function(){ document.body.removeChild(f); }, 333);
-
-		}//end saver
+        blob = payload instanceof myBlob ?
+            payload :
+            new myBlob([payload], { type: mimeType });
 
 
+        function dataUrlToBlob(strUrl) {
+            var parts = strUrl.split(/[:;,]/),
+                type = parts[1],
+                decoder = parts[2] == "base64" ? atob : decodeURIComponent,
+                binData = decoder(parts.pop()),
+                mx = binData.length,
+                i = 0,
+                uiArr = new Uint8Array(mx);
+
+            for (i; i < mx; ++i) uiArr[i] = binData.charCodeAt(i);
+
+            return new myBlob([uiArr], { type: type });
+        }
+
+        function saver(url, winMode) {
+
+            if ('download' in anchor) { //html5 A[download]
+                anchor.href = url;
+                anchor.setAttribute("download", fileName);
+                anchor.className = "download-js-link";
+                anchor.innerHTML = "downloading...";
+                anchor.style.display = "none";
+                document.body.appendChild(anchor);
+                setTimeout(function () {
+                    anchor.click();
+                    document.body.removeChild(anchor);
+                    if (winMode === true) { setTimeout(function () { self.URL.revokeObjectURL(anchor.href); }, 250); }
+                }, 66);
+                return true;
+            }
+
+            // handle non-a[download] safari as best we can:
+            if (/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
+                url = url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+                if (!window.open(url)) { // popup blocked, offer direct download:
+                    if (confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")) { location.href = url; }
+                }
+                return true;
+            }
+
+            //do iframe dataURL download (old ch+FF):
+            var f = document.createElement("iframe");
+            document.body.appendChild(f);
+
+            if (!winMode) { // force a mime that will download:
+                url = "data:" + url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+            }
+            f.src = url;
+            setTimeout(function () { document.body.removeChild(f); }, 333);
+
+        }//end saver
 
 
-		if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
-			return navigator.msSaveBlob(blob, fileName);
-		}
 
-		if(self.URL){ // simple fast and modern way using Blob and URL:
-			saver(self.URL.createObjectURL(blob), true);
-		}else{
-			// handle non-Blob()+non-URL browsers:
-			if(typeof blob === "string" || blob.constructor===toString ){
-				try{
-					return saver( "data:" +  mimeType   + ";base64,"  +  self.btoa(blob)  );
-				}catch(y){
-					return saver( "data:" +  mimeType   + "," + encodeURIComponent(blob)  );
-				}
-			}
 
-			// Blob but not URL support:
-			reader=new FileReader();
-			reader.onload=function(e){
-				saver(this.result);
-			};
-			reader.readAsDataURL(blob);
-		}
-		return true;
-	}; /* end download() */
+        if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
+            return navigator.msSaveBlob(blob, fileName);
+        }
+
+        if (self.URL) { // simple fast and modern way using Blob and URL:
+            saver(self.URL.createObjectURL(blob), true);
+        } else {
+            // handle non-Blob()+non-URL browsers:
+            if (typeof blob === "string" || blob.constructor === toString) {
+                try {
+                    return saver("data:" + mimeType + ";base64," + self.btoa(blob));
+                } catch (y) {
+                    return saver("data:" + mimeType + "," + encodeURIComponent(blob));
+                }
+            }
+
+            // Blob but not URL support:
+            reader = new FileReader();
+            reader.onload = function (e) {
+                saver(this.result);
+            };
+            reader.readAsDataURL(blob);
+        }
+        return true;
+    }; /* end download() */
 }));
