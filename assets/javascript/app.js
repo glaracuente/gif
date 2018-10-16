@@ -2,6 +2,7 @@
 var topics = ["Mario", "Luigi", "Bowser", "Donkey Kong"];
 var currentTopic = "";
 var offset = 0;
+var favArray = [];
 
 // Function for generating button html code 
 function renderButtons() {
@@ -86,11 +87,10 @@ function renderGIFs(term) {
 
 $(document).on('click', ".fav", function () {
     var divThatHasFullGifStuff = $(this).parent()
-    //$("#favs-appear-here").append(divThatHasFullGifStuff)
-   // var saveArray = []
-    //saveArray.push(divThatHasFullGifStuff)
-   
-    localStorage.setItem("gif", divThatHasFullGifStuff[0].innerHTML)
+    $("#favs-appear-here").prepend(divThatHasFullGifStuff)
+
+    favArray.push(divThatHasFullGifStuff[0].innerHTML)
+    localStorage.setItem("favs", JSON.stringify(favArray))
 });
 
 // Function for the user to add a new topic 
@@ -109,10 +109,13 @@ $(document).on("click", '#add-topic', function (event) {
 // Calling the renderButtons function to display the initial list of topics
 renderButtons();
 
+var storedFavs = localStorage.getItem('favs')
+for (var i=0; i <storedFavs.split(',').length; i++) {
+    console.log(storedFavs.split(',')[i])
+}
 
-var tester = localStorage.getItem('gif')
-var mineGif = $("<div>").html(tester)
-$("#favs-appear-here").append(mineGif)
+//var mineGif = $("<div>").html(tester)
+//$("#favs-appear-here").append(mineGif)
 
 
 
