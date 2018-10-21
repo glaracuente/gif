@@ -1,8 +1,15 @@
 // Initial array of topics
+try {
+    var storedFavs = JSON.parse(localStorage.getItem("favs"))
+    console.log(storedFavs.length)
+}
+catch (err) {
+    var storedFavs = []
+}
+
 var topics = ["Mario", "Luigi", "Bowser", "Donkey Kong"];
 var currentTopic = "";
 var offset = 0;
-var favArray = [];
 
 // Function for generating button html code 
 function renderButtons() {
@@ -69,28 +76,26 @@ function renderGIFs(term) {
 
 
 
-//function downloadURI(uri, name) {
-//    var link = document.createElement("a");
-//   link.download = name;
-//   link.href = uri;
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-//   delete link;
-//}
-//
-//$(document).on('click', ".dlbtn", function () {
-//  var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
-//  downloadURI(dataURL, 'my.gif');
-//download(dataURL, "my.gif", "image/webp");
-///});
+
+
+
+
 
 $(document).on('click', ".fav", function () {
     var divThatHasFullGifStuff = $(this).parent()
-    $("#favs-appear-here").prepend(divThatHasFullGifStuff)
+    var whereAmI = divThatHasFullGifStuff.parent()[0].id
 
-    favArray.push(divThatHasFullGifStuff[0].innerHTML)
-    localStorage.setItem("favs", JSON.stringify(favArray))
+    if (whereAmI === "favs-appear-here") {
+        divThatHasFullGifStuff.remove()
+        var indexToRemove = storedFavs.indexOf(divThatHasFullGifStuff[0].innerHTML)
+        storedFavs.splice(indexToRemove, 1)
+        localStorage.setItem("favs", JSON.stringify(storedFavs))
+    }
+    else {
+        $("#favs-appear-here").prepend(divThatHasFullGifStuff)
+        storedFavs.push(divThatHasFullGifStuff[0].innerHTML)
+        localStorage.setItem("favs", JSON.stringify(storedFavs))
+    }
 });
 
 // Function for the user to add a new topic 
@@ -109,13 +114,12 @@ $(document).on("click", '#add-topic', function (event) {
 // Calling the renderButtons function to display the initial list of topics
 renderButtons();
 
-var storedFavs = localStorage.getItem('favs')
-for (var i=0; i <storedFavs.split(',').length; i++) {
-    console.log(storedFavs.split(',')[i])
-}
 
-//var mineGif = $("<div>").html(tester)
-//$("#favs-appear-here").append(mineGif)
+
+for (var i = 0; i < storedFavs.length; i++) {
+    var newDiv = $("<div>").html(storedFavs[i])
+    $("#favs-appear-here").append(newDiv)
+}
 
 
 
@@ -155,7 +159,21 @@ $(document).on("click", '.gif', function () {
 
 
 
-
+//function downloadURI(uri, name) {
+//    var link = document.createElement("a");
+//   link.download = name;
+//   link.href = uri;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+//   delete link;
+//}
+//
+//$(document).on('click', ".dlbtn", function () {
+//  var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
+//  downloadURI(dataURL, 'my.gif');
+//download(dataURL, "my.gif", "image/webp");
+///});
 
 //download.js v4.2, by dandavis; 2008-2016. [CCBY2] see http://danml.com/download.html for tests/usage
 // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime

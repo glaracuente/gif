@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "https://floating-brushlands-91043.herokuapp.com/cors",
+            data: {
+                url: "https://thumbnail-thumbnail-v1.p.mashape.com/get?url=https://www.amazon.com",
+                key: "6C365355271AF5033FE78FCCE1DA65A85E4193B7A5C95E92F3904ED0407F9D79"
+            },
+            method: "POST",
+            headers: {
+                "X-Mashape-Key": "wRhNI6k7MumshwIUzLKeAJ3GrtIFp1PrxnVjsnUbWuHfLwZUKH"
+            }
+        }).then(function (response) {
+            // Get reference to existing tbody element, create a new table row element
+            console.log(response)
+        });
+    })
+</script>
+
+</html>
