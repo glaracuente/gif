@@ -1,3 +1,14 @@
+body {
+    background-image: url("../images/top.png");
+    background-repeat: repeat;
+}
+
+.gifSection {
+    background-image: url("../images/bottom.png");
+    background-repeat: repeat;
+}
+
+
 .gifDiv {
     font-size: 10px;
     float: left;
@@ -5,6 +16,7 @@
     border: solid 2px black;
     height: 255px;
     width: 200px;
+    background-color: rgb(224, 224, 224);
 }
 
 .gif {
@@ -16,3 +28,15 @@
     display: inline-block;
     float: left;
 }
+
+@media screen and (max-width: 464px) {
+    .gifDiv {
+        height: 155px;
+        width: 100px;
+    }
+    
+    .gif {
+        height: 100px;
+        width: 96px;
+    }
+  }

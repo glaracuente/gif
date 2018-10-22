@@ -7,7 +7,7 @@ catch (err) {
     var storedFavs = []
 }
 
-var topics = ["Mario", "Luigi", "Bowser", "Donkey Kong"];
+var topics = ["Mario", "Luigi", "Peach", "Donkey Kong", "Toad", "Wario", "Yoshi"];
 var currentTopic = "";
 var offset = 0;
 
@@ -133,7 +133,7 @@ $("#moreGIFs").on("click", function () {
 // Function to change from static to moving and vice versa
 $(document).on("click", '.gif', function () {
     var state = $(this).data("state");
-
+console.log($(this))
     if (state === "static") {
         $(this).attr("src", $(this).data("movingGIF"));
         $(this).data("state", "moving");
@@ -150,7 +150,7 @@ renderButtons();
 
 for (var i = 0; i < storedFavs.length; i++) {
     var newDiv = $("<div>").html(storedFavs[i])
-    $("#favs-appear-here").append(newDiv.addClass("gifDiv"))
+    $("#favs-appear-here").prepend(newDiv.addClass("gifDiv")) //When they are added, they lose the moving vs still data
 }
 
 
