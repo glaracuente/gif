@@ -1,5 +1,15 @@
-.gif {
+.gifDiv {
+    font-size: 10px;
     float: left;
+    margin: 2px;
+    border: solid 2px black;
+    height: 255px;
+    width: 200px;
+}
+
+.gif {
+    height: 200px;
+    width: 196px;
 }
 
 .dlbtn {

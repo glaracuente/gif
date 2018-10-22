@@ -43,24 +43,25 @@ function renderGIFs(term) {
     })
         .then(function (response) {
             var results = response.data;
+            console.log(results)
 
             for (var i = 0; i < results.length; i++) {
                 //if (year > 2015) {
                 var topicImage = $("<img>")
-                topicImage.data("staticGIF", results[i].images.fixed_height_still.url)
-                topicImage.data("movingGIF", results[i].images.fixed_height.url)
+                topicImage.data("staticGIF", results[i].images.fixed_width_still.url)
+                topicImage.data("movingGIF", results[i].images.fixed_width.url)
                 topicImage.data("state", "static")
                 topicImage.attr("src", topicImage.data("staticGIF"));
                 topicImage.addClass("gif")
 
-                var ratingP = $("<p>").text("Rating: " + results[i].rating)
+                var ratingP = $("<div>").text("Rating: " + results[i].rating)
                 var year = parseInt(results[i].import_datetime.split('-')[0])
-                var yearP = $("<p>").text("Imported: " + year)
+                var yearP = $("<div>").text("Year: " + year)
 
                 //var downloadButton = $("<button>").addClass("dlbtn fa fa-download")
                 var favButton = $("<button>").addClass("fav fas fa-star")
 
-                var gifDiv = $("<div>").addClass("gif");
+                var gifDiv = $("<div>").addClass("gifDiv");
                 gifDiv.append(topicImage)
                 gifDiv.append(ratingP)
                 gifDiv.append(yearP)
@@ -76,11 +77,6 @@ function renderGIFs(term) {
 
 
 
-
-
-
-
-
 $(document).on('click', ".fav", function () {
     var divThatHasFullGifStuff = $(this).parent()
     var whereAmI = divThatHasFullGifStuff.parent()[0].id
@@ -92,7 +88,7 @@ $(document).on('click', ".fav", function () {
         localStorage.setItem("favs", JSON.stringify(storedFavs))
     }
     else {
-        $("#favs-appear-here").prepend(divThatHasFullGifStuff)
+        $("#favs-appear-here").prepend(divThatHasFullGifStuff.addClass("gifDiv"))
         storedFavs.push(divThatHasFullGifStuff[0].innerHTML)
         localStorage.setItem("favs", JSON.stringify(storedFavs))
     }
@@ -111,15 +107,6 @@ $(document).on("click", '#add-topic', function (event) {
     renderButtons();
 });
 
-// Calling the renderButtons function to display the initial list of topics
-renderButtons();
-
-
-
-for (var i = 0; i < storedFavs.length; i++) {
-    var newDiv = $("<div>").html(storedFavs[i])
-    $("#favs-appear-here").append(newDiv)
-}
 
 
 
@@ -158,22 +145,32 @@ $(document).on("click", '.gif', function () {
 
 
 
+// Calling the renderButtons function to display the initial list of topics
+renderButtons();
 
-//function downloadURI(uri, name) {
-//    var link = document.createElement("a");
-//   link.download = name;
-//   link.href = uri;
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-//   delete link;
-//}
-//
-//$(document).on('click', ".dlbtn", function () {
-//  var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
-//  downloadURI(dataURL, 'my.gif');
-//download(dataURL, "my.gif", "image/webp");
-///});
+for (var i = 0; i < storedFavs.length; i++) {
+    var newDiv = $("<div>").html(storedFavs[i])
+    $("#favs-appear-here").append(newDiv.addClass("gifDiv"))
+}
+
+
+
+/*
+function downloadURI(uri, name) {
+    var link = document.createElement("a");
+   link.download = name;
+   link.href = uri;
+   document.body.appendChild(link);
+   link.click();
+   document.body.removeChild(link);
+   delete link;
+}
+
+$(document).on('click', ".dlbtn", function () {
+  var dataURL = "http://images6.fanpop.com/image/photos/37100000/amazing-siderman-marvel-live-action-movies-37161341-1920-1080.jpg";
+  downloadURI(dataURL, 'my.gif');
+download(dataURL, "my.gif", "image/webp");
+});
 
 //download.js v4.2, by dandavis; 2008-2016. [CCBY2] see http://danml.com/download.html for tests/usage
 // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
@@ -335,5 +332,5 @@ $(document).on("click", '.gif', function () {
             reader.readAsDataURL(blob);
         }
         return true;
-    }; /* end download() */
-}));
+    };  
+})); */

@@ -16,36 +16,57 @@
 
 <body>
 
-  <div class="container">
-    <h1>GIF Search</h1>
+  <header class="mb-2">
+    <div class="container-fullwidth text-center">
+      <h1>GIF Search</h1>
+    </div>
+  </header>
 
-    <!-- topics will display here -->
-    <div id="topics"></div>
-
-    <!-- Form will display here -->
-    <form id="topic-form">
-      <label for="topic-input">Add your own Search topic!</label>
-      <input type="text" id="topic-input">
-      <br>
-      <input id="add-topic" type="submit" value="Add your own Search topic!">
-    </form>
-
-    <!-- add more Gifs button will display here -->
-    <button id="moreGIFs">More GIFs!</button>
-
-    <div class="row">
-      <!-- Favorite GIFs will go here -->
-      <div id="favs-appear-here"></div>
+  <div class="container text-center">
+    <div class="row mb-2">
+      <div class="col-12">
+        <!-- topics will display here -->
+        <div id="topics"></div>
+      </div>
     </div>
 
-    <div class="row">
-      <!-- GIFs will display here -->
-      <div id="gifs-appear-here"></div>
+    <div class="row mb-2">
+      <div class="col-12">
+        <!-- Form will display here -->
+        <form id="topic-form">
+          <input type="text" id="topic-input">
+          <input id="add-topic" type="submit" value="Add your own Search topic!">
+        </form>
+      </div>
     </div>
-    
 
 
+    <div class="row">
+      <div class="col-12">
+        <!-- add more Gifs button will display here -->
+        <button id="moreGIFs">More GIFs!</button>
+      </div>
+    </div>
   </div>
+
+
+  <div class="container-fluid text-center m-4">
+    <div class="row">
+      <div class="col-8">
+        <!-- Favorite GIFs will go here -->
+        <h3>Results</h3>
+        <div id="gifs-appear-here"></div>
+      </div>
+
+      <div class="col-4">
+        <!-- GIFs will display here -->
+        <h3 class="text-center">Favorites</h3>
+        <div id="favs-appear-here"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
 
 
 
