@@ -1,11 +1,12 @@
 body {
-    background-image: url("../images/top.png");
-    background-repeat: repeat;
+    /*background-image: url("../images/top.png");
+    background-repeat: repeat;*/
+    background-color: rgba(92, 92, 83, 0.678);
 }
 
 .gifSection {
-    background-image: url("../images/bottom.png");
-    background-repeat: repeat;
+    /*background-image: url("../images/bottom.png");
+    background-repeat: repeat;*/
 }
 
 
